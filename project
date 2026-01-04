@@ -1,0 +1,142 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace projeck5._6._1
+{
+    class Program
+    {
+        static void Pokaz((string Name, string ListName, int Age, bool Pitomes, string[] Pitomsu, string[] Svets) User)
+        {
+            Console.WriteLine($"Ваше имя: {User.Name}");
+            Console.WriteLine($"Ваше фамилия: {User.ListName}");
+            Console.WriteLine($"Ваш возраст: {User.Age}");
+            if (User.Pitomes && User.Pitomsu.Length > 1)// проверка наличия и кол во питомцев для корректного ответа
+            {
+                Console.WriteLine($"Ваши питомы: {string.Join(", ", User.Pitomsu)}");
+            }
+            else if (User.Pitomes && User.Pitomsu.Length == 1)
+            {
+                Console.WriteLine($"Ваш питомец: {string.Join(", ", User.Pitomsu)}");
+            }
+            else
+            {
+                Console.WriteLine("У вас нет питомцев");
+            }
+            if (User.Svets.Length > 1)// проверка кол-во любимых цветов для корректного ответа
+            {
+                Console.WriteLine($"Ваши любимые цвета: {string.Join(", ", User.Svets)}");
+            }
+            else
+            {
+                Console.WriteLine($"Ваш любимый цвет: {string.Join(", ", User.Svets)}");
+            }
+
+        }
+
+        static (string Name, string ListName, int Age, bool Pitomes, string[] Pitomsu, string[] Svets) EnterUser()
+        {
+            (string Name, string ListName, int Age, bool Pitomes, string[] Pitomsu, string[] Svets) User = ("", "", 0, false, Array.Empty<string>(), Array.Empty<string>());
+
+            Console.WriteLine("Введите имя");
+            User.Name = Console.ReadLine();
+
+            Console.WriteLine("Введите фамилию");
+            User.ListName = Console.ReadLine();
+
+            Console.WriteLine("Введите ваш возраст");
+            User.Age = Proverka();
+
+            Console.WriteLine("Есть ли у вас питомцы?");
+            do   // проверка корректности ответа
+            {
+                string otvet = Console.ReadLine().ToLower().Trim();
+                if (otvet == "да")
+                {
+                    User.Pitomes = true;
+                    Console.WriteLine("Сколько у вас питомцев?");
+                    User.Pitomsu = Nicname(Proverka());
+                    break;
+                }
+                else if (otvet == "нет")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Введен не корректный ответ, введите \"да\" или \"нет\"");
+                }
+            } while (true);
+
+            Console.WriteLine("Сколько у вас любимых цветов?");
+            User.Svets = LawColor(Proverka());
+            return User;
+        }
+
+        static int Proverka()//  проверка кооректности введенных данных (возраст, кол во питомцев итд)
+        {
+            bool bb;
+            int x;
+            do
+            {
+                bb = int.TryParse(Console.ReadLine(), out x);
+                if (!bb)
+                {
+                    Console.WriteLine("Введено не число");
+                }
+            } while (!bb);
+            if (x <= 0)
+            {
+                Console.WriteLine("Введино неккорктное число");
+                x = Proverka();
+            }
+            return x;
+        }
+
+
+        static string[] Nicname(int colpit) // метод возварата массива кличок питомцев
+        {
+            var result = new string[colpit];
+            if (colpit == 1)
+            {
+                Console.WriteLine("Напишите кличку вашего питомца");
+            }
+            else
+            {
+                Console.WriteLine("Напишите клички ваших питомцев");
+            }
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = Console.ReadLine();
+            }
+            return result;
+        }
+
+
+        static string[] LawColor(int colcolor) // метод возварата массива по кол цветов
+        {
+            var result = new string[colcolor];
+            if (colcolor == 1)
+            {
+                Console.WriteLine("Напишите ваш любимый цвет");
+            }
+            else
+            {
+                Console.WriteLine("Напишите ваши любимые цвета");
+            }
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = Console.ReadLine();
+            }
+            return result;
+        }
+        static void Main(string[] args)
+        {
+            var user = EnterUser();
+            Pokaz(user);
+            Console.ReadKey();
+        }
+    }
+}
